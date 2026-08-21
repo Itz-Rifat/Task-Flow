@@ -17,30 +17,30 @@ It cleanly separates concerns between a **Next.js Frontend** (App Router, RSC, T
 ## Repository Structure
 
 
+```text
 Octabrain/
-├── client/                 # Next.js App Router Frontend
+├── client/                       # Next.js App Router frontend
 │   ├── src/
-│   │   ├── app/            # App Router pages (RSC initial shells + Client components)
-│   │   ├── components/     # KanbanBoard, TaskCard, ProjectsList, Navbar
-│   │   ├── lib/            # Axios API client, TanStack QueryProvider, AuthContext
-│   │   └── types/          # TypeScript interfaces
-│   ├── .env.local
+│   │   ├── app/                  # App Router pages
+│   │   ├── components/           # KanbanBoard, TaskCard, ProjectsList, Navbar
+│   │   ├── lib/                  # API client, QueryProvider, AuthContext
+│   │   └── types/                # TypeScript interfaces
+│   ├── .env.local                # Local only, not committed
 │   └── package.json
 │
-├── server/                 # Express REST API Backend
-│   ├── prisma/             # PostgreSQL schema.prisma & seed.ts script
+├── server/                       # Express REST API backend
+│   ├── prisma/                   # PostgreSQL schema and seed script
 │   ├── src/
-│   │   ├── controllers/    # authController, projectController, taskController
-│   │   ├── middleware/     # JWT Auth middleware, global error handler
-│   │   ├── routes/         # API routes
-│   │   └── index.ts        # Server entry point
-│   ├── .env
+│   │   ├── controllers/          # Auth, project, and task controllers
+│   │   ├── middleware/           # JWT auth and error handling
+│   │   ├── routes/               # API routes
+│   │   └── index.ts              # Server entry point
+│   ├── .env.example              # Environment variable template
 │   └── package.json
 │
 └── docs/
-    └── postman_collection.json # Exported Postman REST API Collection
-
-
+      └── postman_collection.json   # Postman REST API collection
+```
 
 
 ## Local Environment Setup & Installation
@@ -116,7 +116,7 @@ Environment files are intentionally excluded from Git. Copy `server/.env.example
 
 ## API Documentation
 
-A complete, ready-to-import Postman collection is located at [`docs/postman_collection.json`](file:///e:/Programming%20Hero/Octabrain/docs/postman_collection.json).
+A complete, ready-to-import Postman collection is located at [`docs/postman_collection.json`](docs/postman_collection.json).
 
 ### Core REST Endpoints Summary:
 
