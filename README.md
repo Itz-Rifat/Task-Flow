@@ -116,8 +116,10 @@ Environment files are intentionally excluded from Git. Copy `server/.env.example
 
 ## 📚 Comprehensive API Documentation
 
-Your repository includes two complete forms of API documentation as required by the PRD:
-1. **Postman Collection Export**: Located at [`docs/postman_collection.json`](docs/postman_collection.json) (ready to import directly into Postman).
+The complete standalone API reference is available at [`API_DOCUMENTATION.md`](API_DOCUMENTATION.md), with a ready-to-import Postman collection at [`postman_collection.json`](postman_collection.json).
+
+For convenience, the endpoint summary below is also included in this README:
+1. **Postman Collection Export**: Located at [`postman_collection.json`](postman_collection.json) (ready to import directly into Postman).
 2. **REST API Reference**: Detailed below with headers, request bodies, query parameters, and response schemas.
 
 ---
