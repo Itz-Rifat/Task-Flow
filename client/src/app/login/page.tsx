@@ -115,7 +115,7 @@ export default function LoginPage() {
           <div className="mt-6 bg-slate-900/90 p-4 rounded-xl text-xs text-slate-400 border border-slate-800">
             <div className="flex items-center gap-2 font-medium text-cyan-300 mb-1">
               <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>Assessment Demo Credentials</span>
+              <span>Demo Credentials</span>
             </div>
             <p>Email: <code className="text-slate-200 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">rifathasan1875@gmail.com</code></p>
             <p className="mt-1">Password: <code className="text-slate-200 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">123456</code></p>

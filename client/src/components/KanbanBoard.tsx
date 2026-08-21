@@ -137,6 +137,19 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
     setModalError('');
   };
 
+  const handleOpenTaskModal = () => {
+    setTaskTitle('');
+    setTaskDesc('');
+    setTaskPriority('MEDIUM');
+    setTaskStatus('TODO');
+    setTaskDueDate('');
+    setSelectedAssignee(null);
+    setAssigneeSearch('');
+    setIsAssigneeDropdownOpen(false);
+    setModalError('');
+    setIsTaskModalOpen(true);
+  };
+
   // Create Task Mutation
   const createTaskMutation = useMutation({
     mutationFn: async (newTask: {
@@ -248,7 +261,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
 
           {isOwner && (
             <button
-              onClick={() => setIsTaskModalOpen(true)}
+              onClick={handleOpenTaskModal}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-medium text-xs shadow-md shadow-violet-500/20 transition-all shrink-0"
             >
               <Plus className="w-4 h-4" />

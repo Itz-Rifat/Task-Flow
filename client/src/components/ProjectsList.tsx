@@ -32,9 +32,6 @@ export default function ProjectsList() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
-      setIsModalOpen(false);
-      setTitle('');
-      setDescription('');
       handleCloseModal();
     },
     onError: (err: any) => {
@@ -47,6 +44,13 @@ export default function ProjectsList() {
     setTitle('');
     setDescription('');
     setError('');
+  };
+
+  const handleOpenModal = () => {
+    setTitle('');
+    setDescription('');
+    setError('');
+    setIsModalOpen(true);
   };
 
   const handleCreate = (e: React.FormEvent) => {
@@ -76,7 +80,7 @@ export default function ProjectsList() {
         </div>
 
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleOpenModal}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm shadow-lg shadow-indigo-500/20 transition-all hover:scale-105"
         >
           <Plus className="w-4 h-4" />
@@ -148,7 +152,7 @@ export default function ProjectsList() {
             Get started by creating your first project board to organize and track tasks.
           </p>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenModal}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm transition-all"
           >
             <Plus className="w-4 h-4" />
