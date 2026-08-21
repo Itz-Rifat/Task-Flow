@@ -117,7 +117,26 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
     mutationFn: async (taskId: string) => {
       await api.delete(`/tasks/${taskId}`);
     },
-    onSuccess: () => {
+    onMutate: async (taskId) => {
+      const tasksQueryKey = ['tasks', projectId, search, priorityFilter, statusFilter] as const;
+      await queryClient.cancelQueries({ queryKey: tasksQueryKey });
+      const previousTasks = queryClient.getQueryData<Task[]>(tasksQueryKey);
+
+      if (previousTasks) {
+        queryClient.setQueryData<Task[]>(
+          tasksQueryKey,
+          previousTasks.filter((task) => task.id !== taskId)
+        );
+      }
+
+      return { previousTasks, tasksQueryKey };
+    },
+    onError: (_error, _taskId, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(context.tasksQueryKey, context.previousTasks);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
