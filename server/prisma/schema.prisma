@@ -1,0 +1,67 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password_hash String
+  name          String
+  created_at    DateTime  @default(now())
+
+  // Relations
+  owned_projects Projects[] @relation("ProjectOwner")
+  assigned_tasks Tasks[]    @relation("TaskAssignee")
+}
+
+model Projects {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  owner_id    String
+  created_at  DateTime @default(now())
+
+  // Relations
+  owner User    @relation("ProjectOwner", fields: [owner_id], references: [id], onDelete: Cascade)
+  tasks Tasks[]
+
+  @@index([owner_id])
+}
+
+model Tasks {
+  id          String       @id @default(uuid())
+  project_id  String
+  title       String
+  description String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  assigned_to String?
+  due_date    DateTime?
+  created_at  DateTime     @default(now())
+
+  // Relations
+  project  Projects @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  assignee User?    @relation("TaskAssignee", fields: [assigned_to], references: [id], onDelete: SetNull)
+
+  @@index([project_id])
+  @@index([assigned_to])
+  @@index([status])
+  @@index([priority])
+}
