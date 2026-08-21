@@ -118,6 +118,23 @@ export const getProjectTasks = async (req: AuthRequest, res: Response, next: Nex
       orderBy: { created_at: 'desc' },
     });
 
+    const priorityRank = { HIGH: 0, MEDIUM: 1, LOW: 2 } as const;
+    tasks.sort((firstTask, secondTask) => {
+      const priorityDifference = priorityRank[firstTask.priority] - priorityRank[secondTask.priority];
+      if (priorityDifference !== 0) return priorityDifference;
+
+      if (firstTask.due_date && secondTask.due_date) {
+        const dueDateDifference = firstTask.due_date.getTime() - secondTask.due_date.getTime();
+        if (dueDateDifference !== 0) return dueDateDifference;
+      } else if (firstTask.due_date) {
+        return -1;
+      } else if (secondTask.due_date) {
+        return 1;
+      }
+
+      return secondTask.created_at.getTime() - firstTask.created_at.getTime();
+    });
+
     return res.status(200).json(tasks);
   } catch (error) {
     next(error);

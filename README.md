@@ -114,23 +114,214 @@ Environment files are intentionally excluded from Git. Copy `server/.env.example
 
 ---
 
-## API Documentation
+## 📚 Comprehensive API Documentation
 
-A complete, ready-to-import Postman collection is located at [`docs/postman_collection.json`](docs/postman_collection.json).
+Your repository includes two complete forms of API documentation as required by the PRD:
+1. **Postman Collection Export**: Located at [`docs/postman_collection.json`](docs/postman_collection.json) (ready to import directly into Postman).
+2. **REST API Reference**: Detailed below with headers, request bodies, query parameters, and response schemas.
 
-### Core REST Endpoints Summary:
+---
 
-#### Auth Routes (Public)
-- `POST /api/auth/register` — User signup & password hashing (bcrypt).
-- `POST /api/auth/login` — Authentication & JWT emission.
+### Authentication Endpoints (Public)
 
-#### Project & Task Routes (Protected via JWT `Authorization: Bearer <token>`)
-- `GET /api/projects` — Fetch projects owned by or assigned to user.
-- `POST /api/projects` — Create project.
-- `GET /api/projects/:id/tasks` — Fetch tasks (supports query filtering: `?status=IN_PROGRESS&priority=HIGH&search=title`).
-- `POST /api/projects/:id/tasks` — Create task.
-- `PATCH /api/tasks/:id` — Update status, priority, or assignee (used for drag & drop column status updates).
-- `DELETE /api/tasks/:id` — Delete task.
+#### 1. Register User
+- **Endpoint**: `POST /api/auth/register`
+- **Headers**: `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "name": "Rifat Hasan Nazim",
+    "email": "rifathasan1875@gmail.com",
+    "password": "123456"
+  }
+  ```
+- **Success Response** (`201 Created`):
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "cm7...",
+      "name": "Rifat Hasan Nazim",
+      "email": "rifathasan1875@gmail.com"
+    }
+  }
+  ```
+
+#### 2. Login User
+- **Endpoint**: `POST /api/auth/login`
+- **Headers**: `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "email": "rifathasan1875@gmail.com",
+    "password": "123456"
+  }
+  ```
+- **Success Response** (`200 OK`):
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "cm7...",
+      "name": "Rifat Hasan Nazim",
+      "email": "rifathasan1875@gmail.com"
+    }
+  }
+  ```
+
+---
+
+### User & Project Endpoints (Protected - Require `Authorization: Bearer <token>`)
+
+#### 3. Search Users
+- **Endpoint**: `GET /api/users`
+- **Headers**: `Authorization: Bearer <JWT_TOKEN>`
+- **Query Parameters**: `?search=alex` (optional name/email search string)
+- **Success Response** (`200 OK`):
+  ```json
+  [
+    {
+      "id": "cm7...",
+      "name": "Alex Johnson",
+      "email": "alex@example.com"
+    }
+  ]
+  ```
+
+#### 4. Fetch Projects
+- **Endpoint**: `GET /api/projects`
+- **Headers**: `Authorization: Bearer <JWT_TOKEN>`
+- **Description**: Returns all projects owned by or assigned/shared with the authenticated user.
+- **Success Response** (`200 OK`):
+  ```json
+  [
+    {
+      "id": "proj-123",
+      "title": "TaskFlow App Launch",
+      "description": "Full-stack Kanban application build",
+      "owner_id": "cm7...",
+      "created_at": "2026-08-21T11:00:00.000Z",
+      "_count": { "tasks": 5 },
+      "owner": { "id": "cm7...", "name": "Rifat", "email": "rifat@example.com" }
+    }
+  ]
+  ```
+
+#### 5. Create Project
+- **Endpoint**: `POST /api/projects`
+- **Headers**: 
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <JWT_TOKEN>`
+- **Request Body**:
+  ```json
+  {
+    "title": "TaskFlow Release v1",
+    "description": "Full-stack Kanban application build"
+  }
+  ```
+- **Success Response** (`201 Created`):
+  ```json
+  {
+    "id": "proj-124",
+    "title": "TaskFlow Release v1",
+    "description": "Full-stack Kanban application build",
+    "owner_id": "cm7...",
+    "created_at": "2026-08-21T12:00:00.000Z"
+  }
+  ```
+
+---
+
+### Task Endpoints (Protected - Require `Authorization: Bearer <token>`)
+
+#### 6. Fetch Project Tasks
+- **Endpoint**: `GET /api/projects/:id/tasks`
+- **Headers**: `Authorization: Bearer <JWT_TOKEN>`
+- **Query Parameters (Optional Filters)**:
+  - `status`: `TODO` | `IN_PROGRESS` | `DONE`
+  - `priority`: `LOW` | `MEDIUM` | `HIGH`
+  - `search`: Filter by task title string
+- **Note**: Non-owners fetching tasks receive strictly tasks assigned to them (`assigned_to = userId`).
+- **Success Response** (`200 OK`):
+  ```json
+  [
+    {
+      "id": "task-001",
+      "project_id": "proj-123",
+      "title": "Setup JWT Authentication",
+      "description": "Create signup and login routes",
+      "status": "DONE",
+      "priority": "HIGH",
+      "assigned_to": "user-456",
+      "due_date": "2026-08-25T00:00:00.000Z",
+      "created_at": "2026-08-21T11:30:00.000Z",
+      "assignee": { "name": "Sarah Connor", "email": "sarah@example.com" }
+    }
+  ]
+  ```
+
+#### 7. Create Task
+- **Endpoint**: `POST /api/projects/:id/tasks`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <JWT_TOKEN>`
+- **Note**: Restricted to Project Owners only.
+- **Request Body**:
+  ```json
+  {
+    "title": "Implement Drag & Drop Kanban",
+    "description": "Use @hello-pangea/dnd for column movement",
+    "status": "TODO",
+    "priority": "HIGH",
+    "assigned_to": "user-456",
+    "due_date": "2026-08-28"
+  }
+  ```
+- **Success Response** (`201 Created`):
+  ```json
+  {
+    "id": "task-002",
+    "project_id": "proj-123",
+    "title": "Implement Drag & Drop Kanban",
+    "description": "Use @hello-pangea/dnd for column movement",
+    "status": "TODO",
+    "priority": "HIGH",
+    "assigned_to": "user-456",
+    "due_date": "2026-08-28T00:00:00.000Z",
+    "created_at": "2026-08-21T12:15:00.000Z"
+  }
+  ```
+
+#### 8. Update Task (PATCH)
+- **Endpoint**: `PATCH /api/tasks/:id`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <JWT_TOKEN>`
+- **Request Body** (partial fields allowed):
+  ```json
+  {
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM"
+  }
+  ```
+- **Success Response** (`200 OK`):
+  ```json
+  {
+    "id": "task-002",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM"
+  }
+  ```
+
+#### 9. Delete Task
+- **Endpoint**: `DELETE /api/tasks/:id`
+- **Headers**: `Authorization: Bearer <JWT_TOKEN>`
+- **Success Response** (`200 OK`):
+  ```json
+  {
+    "message": "Task deleted successfully"
+  }
+  ```
 
 ---
 
