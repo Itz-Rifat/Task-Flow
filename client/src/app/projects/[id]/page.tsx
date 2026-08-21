@@ -86,7 +86,7 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* Dynamic Client Kanban Board */}
-        <KanbanBoard projectId={projectId} />
+        <KanbanBoard projectId={projectId} isOwner={project ? project.owner_id === user.id : true} />
       </main>
     </div>
   );

@@ -10,6 +10,7 @@ import { Plus, Search, Filter, Circle, Clock, CheckCircle2, Loader2, X, Calendar
 
 interface KanbanBoardProps {
   projectId: string;
+  isOwner?: boolean;
 }
 
 const COLUMNS: { id: TaskStatus; title: string; icon: any; color: string; bgHeader: string }[] = [
@@ -36,7 +37,7 @@ const COLUMNS: { id: TaskStatus; title: string; icon: any; color: string; bgHead
   },
 ];
 
-export default function KanbanBoard({ projectId }: KanbanBoardProps) {
+export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardProps) {
   const [search, setSearch] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -239,13 +240,15 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
             </select>
           </div>
 
-          <button
-            onClick={() => setIsTaskModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-md shadow-indigo-500/20 transition-all shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Task</span>
-          </button>
+          {isOwner && (
+            <button
+              onClick={() => setIsTaskModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-md shadow-indigo-500/20 transition-all shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Task</span>
+            </button>
+          )}
         </div>
       </div>
 
