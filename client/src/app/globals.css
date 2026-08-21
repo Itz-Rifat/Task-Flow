@@ -16,6 +16,10 @@
   color: #002133;
 }
 
+.project-board-bg {
+  background: #e5e7eb;
+}
+
 .auth-bg {
   background:
     radial-gradient(circle at 50% 18%, rgba(15, 118, 110, 0.16), transparent 32%),
@@ -76,7 +80,7 @@
 .purple-app-bg .text-indigo-400,
 .purple-app-bg .text-violet-400,
 .purple-app-bg .text-violet-500 {
-  color: #050794 !important;
+  color: #0077B6 !important;
 }
 
 .purple-app-bg .bg-slate-900,
@@ -117,14 +121,41 @@
   color: #002133;
 }
 
+.purple-app-bg .task-status-select option {
+  background: #d2f3f9 !important;
+  color: #06272d !important;
+}
+
 .app-navbar {
-  background: rgba(204, 237, 255, 0.96);
-  border-color: rgba(0, 99, 153, 0.24);
-  box-shadow: 0 8px 24px rgba(0, 99, 153, 0.1);
+  background: #123a57;
+  border-color: #0077B6;
+  box-shadow: 0 8px 24px rgba(0, 33, 51, 0.28);
+}
+
+.purple-app-bg .app-navbar {
+  background: #123a57;
+  border-color: #0077B6;
 }
 
 .app-navbar .bg-slate-950 {
-  background-color: #ccedff !important;
+  background-color: #002133 !important;
+}
+
+.app-navbar .brand-name {
+  color: #e5f6ff;
+}
+
+.app-navbar .text-slate-400 {
+  color: #a6e7f2 !important;
+}
+
+.app-navbar [class~="bg-slate-900/60"] {
+  background-color: rgba(0, 33, 51, 0.72) !important;
+  border-color: rgba(166, 231, 242, 0.22) !important;
+}
+
+.app-navbar .text-slate-200 {
+  color: #e5f6ff !important;
 }
 
 .auth-navbar {
@@ -166,17 +197,17 @@
 
 .purple-app-bg .bg-violet-600,
 .purple-app-bg .bg-indigo-600 {
-  background-color: #080cf7 !important;
+  background-color: #0077B6 !important;
 }
 
 .purple-app-bg .hover\:bg-violet-700:hover,
 .purple-app-bg .hover\:bg-indigo-500:hover {
-  background-color: #0609c6 !important;
+  background-color: #006399 !important;
 }
 
 .purple-app-bg .text-violet-600,
 .purple-app-bg .text-indigo-400 {
-  color: #050794 !important;
+  color: #0077B6 !important;
 }
 
 .purple-app-bg .text-cyan-400,

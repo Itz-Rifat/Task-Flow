@@ -428,7 +428,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
                           setSelectedAssignee(null);
                           setIsAssigneeDropdownOpen(false);
                         }}
-                        className="p-2 rounded-lg text-xs text-slate-400 hover:bg-slate-800 hover:text-white cursor-pointer flex items-center justify-between"
+                        className="p-2.5 rounded-lg text-xs font-semibold text-white bg-slate-900/60 hover:bg-slate-800 hover:text-white cursor-pointer flex items-center justify-between transition-colors"
                       >
                         <span>Unassigned</span>
                         {!selectedAssignee && <Check className="w-3.5 h-3.5 text-indigo-400" />}

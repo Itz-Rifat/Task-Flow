@@ -21,7 +21,7 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400 flex items-center gap-1.5">
+            <span className="brand-name font-bold text-lg flex items-center gap-1.5">
               TaskFlow <Sparkles className="w-3.5 h-3.5 text-amber-400 inline" />
             </span>
             <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Kanban PM</span>

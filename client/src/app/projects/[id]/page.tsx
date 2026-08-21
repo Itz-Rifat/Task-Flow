@@ -48,7 +48,7 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="min-h-screen purple-app-bg flex flex-col selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen purple-app-bg project-board-bg flex flex-col selection:bg-purple-500 selection:text-white">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -71,13 +71,13 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
                   {project ? project.title : 'Project Board'}
                 </h1>
                 {project?.description && (
-                  <p className="text-xs text-purple-300/80 mt-1">{project.description}</p>
+                  <p className="text-xs text-black mt-1">{project.description}</p>
                 )}
               </div>
             </div>
 
             {project?.created_at && (
-              <span className="text-xs text-purple-300/70 flex items-center gap-1.5 self-start sm:self-auto">
+              <span className="text-xs text-black flex items-center gap-1.5 self-start sm:self-auto">
                 <Calendar className="w-3.5 h-3.5" />
                 Created {new Date(project.created_at).toLocaleDateString()}
               </span>

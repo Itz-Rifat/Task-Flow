@@ -23,19 +23,19 @@ export default function TaskCard({ task, onDelete, onStatusChange }: TaskCardPro
     switch (priority) {
       case 'HIGH':
         return (
-          <span className="px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md bg-red-500/10 text-red-600 border border-red-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
             <AlertCircle className="w-3 h-3" /> High
           </span>
         );
       case 'MEDIUM':
         return (
-          <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-orange-500 border border-amber-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
             <ArrowUpRight className="w-3 h-3" /> Medium
           </span>
         );
       case 'LOW':
         return (
-          <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-green-600 border border-emerald-500/20 text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3" /> Low
           </span>
         );
@@ -54,7 +54,7 @@ export default function TaskCard({ task, onDelete, onStatusChange }: TaskCardPro
           {getPriorityBadge(task.priority)}
           <button
             onClick={() => onDelete(task.id)}
-            className="p-1 rounded text-slate-500 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="p-1 rounded text-slate-500 hover:text-red-300 hover:bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
             title="Delete task"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -74,7 +74,7 @@ export default function TaskCard({ task, onDelete, onStatusChange }: TaskCardPro
           <select
             value={task.status}
             onChange={(e) => onStatusChange(task.id, e.target.value as TaskStatus)}
-            className="w-full text-[11px] bg-slate-900/90 text-slate-300 border border-slate-800 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-500"
+            className="task-status-select w-full text-[11px] bg-slate-900/90 text-slate-300 border border-slate-800 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-150"
           >
             <option value="TODO">Move to: TODO</option>
             <option value="IN_PROGRESS">Move to: IN PROGRESS</option>
