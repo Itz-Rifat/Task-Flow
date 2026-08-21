@@ -54,6 +54,31 @@
 			]
 		},
 		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Search Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users?search=alex",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"],
+							"query": [
+								{ "key": "search", "value": "alex" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
 			"name": "Projects",
 			"item": [
 				{
