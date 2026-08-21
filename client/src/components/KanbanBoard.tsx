@@ -19,21 +19,21 @@ const COLUMNS: { id: TaskStatus; title: string; icon: any; color: string; bgHead
     title: 'To Do',
     icon: Circle,
     color: 'text-indigo-400',
-    bgHeader: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300',
+    bgHeader: 'workspace-column-todo',
   },
   {
     id: 'IN_PROGRESS',
     title: 'In Progress',
     icon: Clock,
     color: 'text-amber-400',
-    bgHeader: 'bg-amber-500/10 border-amber-500/20 text-amber-300',
+    bgHeader: 'workspace-column-progress',
   },
   {
     id: 'DONE',
     title: 'Done',
     icon: CheckCircle2,
     color: 'text-emerald-400',
-    bgHeader: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300',
+    bgHeader: 'workspace-column-done',
   },
 ];
 
@@ -49,7 +49,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
   const [taskPriority, setTaskPriority] = useState<TaskPriority>('MEDIUM');
   const [taskStatus, setTaskStatus] = useState<TaskStatus>('TODO');
   const [taskDueDate, setTaskDueDate] = useState('');
-  
+
   // Assignee Dropdown State
   const [assigneeSearch, setAssigneeSearch] = useState('');
   const [selectedAssignee, setSelectedAssignee] = useState<User | null>(null);
@@ -123,6 +123,20 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
     },
   });
 
+  // Reset & Close Modal
+  const handleCloseTaskModal = () => {
+    setIsTaskModalOpen(false);
+    setTaskTitle('');
+    setTaskDesc('');
+    setTaskPriority('MEDIUM');
+    setTaskStatus('TODO');
+    setTaskDueDate('');
+    setSelectedAssignee(null);
+    setAssigneeSearch('');
+    setIsAssigneeDropdownOpen(false);
+    setModalError('');
+  };
+
   // Create Task Mutation
   const createTaskMutation = useMutation({
     mutationFn: async (newTask: {
@@ -139,15 +153,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
       queryClient.invalidateQueries({ queryKey: ['projects'] });
-      setIsTaskModalOpen(false);
-      setTaskTitle('');
-      setTaskDesc('');
-      setTaskPriority('MEDIUM');
-      setTaskStatus('TODO');
-      setTaskDueDate('');
-      setSelectedAssignee(null);
-      setAssigneeSearch('');
-      setIsAssigneeDropdownOpen(false);
+      handleCloseTaskModal();
     },
     onError: (err: any) => {
       setModalError(err.response?.data?.error || 'Failed to create task');
@@ -243,7 +249,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
           {isOwner && (
             <button
               onClick={() => setIsTaskModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-md shadow-indigo-500/20 transition-all shrink-0"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-medium text-xs shadow-md shadow-violet-500/20 transition-all shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Add Task</span>
@@ -287,9 +293,8 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`flex-1 space-y-3 p-1 rounded-xl transition-colors ${
-                          snapshot.isDraggingOver ? 'bg-indigo-500/5 ring-1 ring-indigo-500/20' : ''
-                        }`}
+                        className={`flex-1 space-y-3 p-1 rounded-xl transition-colors ${snapshot.isDraggingOver ? 'bg-violet-500/10 ring-1 ring-violet-500/20' : ''
+                          }`}
                       >
                         {columnTasks.length > 0 ? (
                           columnTasks.map((task, index) => (
@@ -333,7 +338,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold text-white">Create Task</h2>
               <button
-                onClick={() => setIsTaskModalOpen(false)}
+                onClick={handleCloseTaskModal}
                 className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -498,7 +503,7 @@ export default function KanbanBoard({ projectId, isOwner = true }: KanbanBoardPr
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setIsTaskModalOpen(false)}
+                  onClick={handleCloseTaskModal}
                   className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 transition-colors"
                 >
                   Cancel

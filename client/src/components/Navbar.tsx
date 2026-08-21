@@ -9,14 +9,15 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const isAuthRoute = pathname === '/login' || pathname === '/register';
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 glass-panel">
+    <header className={`sticky top-0 z-40 w-full border-b border-white/10 glass-panel ${isAuthRoute ? 'auth-navbar' : 'app-navbar'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-500 via-fuchsia-500 to-amber-400 p-0.5 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-105 transition-transform duration-200">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <CheckSquare className="w-5 h-5 text-indigo-400" />
+              <CheckSquare className="w-5 h-5 text-violet-400" />
             </div>
           </div>
           <div className="flex flex-col">

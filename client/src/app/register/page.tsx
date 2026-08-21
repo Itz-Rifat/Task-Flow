@@ -31,21 +31,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen auth-bg flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-4 py-12 relative overflow-hidden">
-        {/* Background glow graphics */}
-        <div className="absolute top-1/4 right-1/2 translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
+        {/* Professional Ambient Glow */}
+        <div className="absolute top-1/3 right-1/2 translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10">
-          <div className="glass-panel rounded-2xl p-8 shadow-2xl border border-white/10">
+          <div className="auth-glass-panel rounded-2xl p-8 shadow-2xl">
             <div className="text-center mb-8">
-              <div className="inline-flex p-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 mb-3">
+              <div className="inline-flex p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-3 shadow-inner">
                 <UserPlus className="w-6 h-6" />
               </div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">Create an Account</h1>
-              <p className="text-sm text-slate-400 mt-1">Get started with your TaskFlow workspace</p>
+              <h1 className="text-2xl font-bold text-slate-100 tracking-tight">Create an Account</h1>
+              <p className="text-xs text-slate-400 mt-1.5">Get started with your TaskFlow workspace</p>
             </div>
 
             {error && (
@@ -65,7 +65,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Elon Mask"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                   />
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="elon.mask@gmail.com"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                   />
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                   />
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl font-medium text-sm shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 mt-2"
+                className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-500 hover:to-teal-500 text-white rounded-xl font-semibold text-sm shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 mt-2"
               >
                 {isLoading ? (
                   <span>Creating Account...</span>
@@ -120,7 +120,7 @@ export default function RegisterPage() {
             <div className="mt-6 pt-6 border-t border-slate-800/80 text-center">
               <p className="text-xs text-slate-400">
                 Already have an account?{' '}
-                <Link href="/login" className="text-purple-400 font-semibold hover:underline">
+                <Link href="/login" className="text-cyan-400 font-semibold hover:underline">
                   Sign In
                 </Link>
               </p>

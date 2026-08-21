@@ -48,14 +48,14 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen purple-app-bg flex flex-col selection:bg-purple-500 selection:text-white">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-indigo-400 transition-colors mb-4"
+            className="inline-flex items-center gap-2 text-xs font-medium text-purple-300 hover:text-purple-100 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Projects
@@ -63,7 +63,7 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/10">
                 <FolderKanban className="w-6 h-6" />
               </div>
               <div>
@@ -71,13 +71,13 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
                   {project ? project.title : 'Project Board'}
                 </h1>
                 {project?.description && (
-                  <p className="text-xs text-slate-400 mt-1">{project.description}</p>
+                  <p className="text-xs text-purple-300/80 mt-1">{project.description}</p>
                 )}
               </div>
             </div>
 
             {project?.created_at && (
-              <span className="text-xs text-slate-500 flex items-center gap-1.5 self-start sm:self-auto">
+              <span className="text-xs text-purple-300/70 flex items-center gap-1.5 self-start sm:self-auto">
                 <Calendar className="w-3.5 h-3.5" />
                 Created {new Date(project.created_at).toLocaleDateString()}
               </span>

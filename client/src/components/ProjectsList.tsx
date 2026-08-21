@@ -35,11 +35,19 @@ export default function ProjectsList() {
       setIsModalOpen(false);
       setTitle('');
       setDescription('');
+      handleCloseModal();
     },
     onError: (err: any) => {
       setError(err.response?.data?.error || 'Failed to create project');
     },
   });
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTitle('');
+    setDescription('');
+    setError('');
+  };
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,12 +159,12 @@ export default function ProjectsList() {
 
       {/* Create Project Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl border border-white/10 relative animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+          <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl border border-white/10 relative">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold text-white">Create New Project</h2>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleCloseModal}
                 className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -196,7 +204,7 @@ export default function ProjectsList() {
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleCloseModal}
                   className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-800 transition-colors"
                 >
                   Cancel
