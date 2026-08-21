@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { api } from '@/lib/api';
-import { Task, TaskPriority, TaskStatus } from '@/types';
+import { Task, TaskPriority, TaskStatus, User } from '@/types';
 import TaskCard from './TaskCard';
-import { Plus, Search, Filter, Circle, Clock, CheckCircle2, Loader2, X } from 'lucide-react';
+import { Plus, Search, Filter, Circle, Clock, CheckCircle2, Loader2, X, Calendar as CalendarIcon, User as UserIcon, Check } from 'lucide-react';
 
 interface KanbanBoardProps {
   projectId: string;
@@ -47,9 +47,26 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
   const [taskDesc, setTaskDesc] = useState('');
   const [taskPriority, setTaskPriority] = useState<TaskPriority>('MEDIUM');
   const [taskStatus, setTaskStatus] = useState<TaskStatus>('TODO');
+  const [taskDueDate, setTaskDueDate] = useState('');
+  
+  // Assignee Dropdown State
+  const [assigneeSearch, setAssigneeSearch] = useState('');
+  const [selectedAssignee, setSelectedAssignee] = useState<User | null>(null);
+  const [isAssigneeDropdownOpen, setIsAssigneeDropdownOpen] = useState(false);
+
   const [modalError, setModalError] = useState('');
 
   const queryClient = useQueryClient();
+
+  // Fetch users for assignment dropdown
+  const { data: usersList = [] } = useQuery<User[]>({
+    queryKey: ['users', assigneeSearch],
+    queryFn: async () => {
+      const res = await api.get('/users', { params: { search: assigneeSearch } });
+      return res.data;
+    },
+    enabled: isTaskModalOpen,
+  });
 
   // Fetch tasks with real-time query filtering
   const { data: tasks = [], isLoading } = useQuery<Task[]>({
@@ -101,6 +118,7 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
   });
 
@@ -111,17 +129,24 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
       description?: string;
       status: TaskStatus;
       priority: TaskPriority;
+      assigned_to?: string | null;
+      due_date?: string | null;
     }) => {
       const res = await api.post(`/projects/${projectId}/tasks`, newTask);
       return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
       setIsTaskModalOpen(false);
       setTaskTitle('');
       setTaskDesc('');
       setTaskPriority('MEDIUM');
       setTaskStatus('TODO');
+      setTaskDueDate('');
+      setSelectedAssignee(null);
+      setAssigneeSearch('');
+      setIsAssigneeDropdownOpen(false);
     },
     onError: (err: any) => {
       setModalError(err.response?.data?.error || 'Failed to create task');
@@ -157,6 +182,8 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
       description: taskDesc,
       status: taskStatus,
       priority: taskPriority,
+      assigned_to: selectedAssignee ? selectedAssignee.id : null,
+      due_date: taskDueDate || null,
     });
   };
 
@@ -340,6 +367,90 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
                 />
               </div>
 
+              {/* Assignee Search & Dropdown Selection */}
+              <div className="relative">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Assign To Person</label>
+                <div
+                  onClick={() => setIsAssigneeDropdownOpen(!isAssigneeDropdownOpen)}
+                  className="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white flex items-center justify-between cursor-pointer hover:border-indigo-500/50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <UserIcon className="w-4 h-4 text-indigo-400" />
+                    {selectedAssignee ? (
+                      <div>
+                        <span className="font-semibold text-white">{selectedAssignee.name}</span>
+                        <span className="text-slate-400 text-[11px] ml-2">({selectedAssignee.email})</span>
+                      </div>
+                    ) : (
+                      <span className="text-slate-500">Unassigned (Click to search user)</span>
+                    )}
+                  </div>
+                  {selectedAssignee && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedAssignee(null);
+                      }}
+                      className="p-1 text-slate-400 hover:text-red-400"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Dropdown Menu */}
+                {isAssigneeDropdownOpen && (
+                  <div className="absolute z-50 mt-1.5 w-full bg-slate-950 border border-slate-700 rounded-xl shadow-2xl p-2 animate-in fade-in duration-150">
+                    <div className="relative mb-2">
+                      <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        value={assigneeSearch}
+                        onChange={(e) => setAssigneeSearch(e.target.value)}
+                        placeholder="Search by name or email..."
+                        className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-indigo-500"
+                        autoFocus
+                      />
+                    </div>
+
+                    <div className="max-h-40 overflow-y-auto space-y-1 custom-scrollbar bg-slate-950">
+                      <div
+                        onClick={() => {
+                          setSelectedAssignee(null);
+                          setIsAssigneeDropdownOpen(false);
+                        }}
+                        className="p-2 rounded-lg text-xs text-slate-400 hover:bg-slate-800 hover:text-white cursor-pointer flex items-center justify-between"
+                      >
+                        <span>Unassigned</span>
+                        {!selectedAssignee && <Check className="w-3.5 h-3.5 text-indigo-400" />}
+                      </div>
+
+                      {usersList.length > 0 ? (
+                        usersList.map((u) => (
+                          <div
+                            key={u.id}
+                            onClick={() => {
+                              setSelectedAssignee(u);
+                              setIsAssigneeDropdownOpen(false);
+                            }}
+                            className="p-2.5 rounded-lg text-xs hover:bg-slate-800 cursor-pointer flex items-center justify-between transition-colors bg-slate-900/60 hover:bg-slate-800"
+                          >
+                            <p className="font-semibold text-white text-xs">{u.name}</p>
+                            {selectedAssignee?.id === u.id && (
+                              <Check className="w-3.5 h-3.5 text-indigo-400" />
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="p-2 text-xs text-slate-500 text-center">No users found</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Status, Priority, and Due Date Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">Status Column</label>
@@ -368,6 +479,19 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
                 </div>
               </div>
 
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Due Date (Optional)</label>
+                <div className="relative">
+                  <CalendarIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <input
+                    type="date"
+                    value={taskDueDate}
+                    onChange={(e) => setTaskDueDate(e.target.value)}
+                    className="w-full pl-10 pr-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 [color-scheme:dark]"
+                  />
+                </div>
+              </div>
+
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
                 <button
                   type="button"
@@ -391,3 +515,4 @@ export default function KanbanBoard({ projectId }: KanbanBoardProps) {
     </div>
   );
 }
+

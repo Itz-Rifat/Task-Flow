@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface AuthContextType {
   user: User | null;
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('taskflow_token');
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (userData: User, authToken: string) => {
+    queryClient.clear();
     setUser(userData);
     setToken(authToken);
     localStorage.setItem('taskflow_token', authToken);
@@ -40,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
+    queryClient.clear();
     setUser(null);
     setToken(null);
     localStorage.removeItem('taskflow_token');

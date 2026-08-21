@@ -88,6 +88,11 @@ export const getProjectTasks = async (req: AuthRequest, res: Response, next: Nex
       project_id: projectId,
     };
 
+    // If the user is NOT the project owner, show ONLY tasks assigned to this user
+    if (project.owner_id !== userId) {
+      whereClause.assigned_to = userId;
+    }
+
     if (status && typeof status === 'string' && ['TODO', 'IN_PROGRESS', 'DONE'].includes(status)) {
       whereClause.status = status;
     }

@@ -101,3 +101,33 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     next(error);
   }
 };
+
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { search } = req.query;
+    const whereClause: any = {};
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      whereClause.OR = [
+        { name: { contains: search.trim(), mode: 'insensitive' } },
+        { email: { contains: search.trim(), mode: 'insensitive' } },
+      ];
+    }
+
+    const users = await prisma.user.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        created_at: true,
+      },
+      take: 20,
+      orderBy: { name: 'asc' },
+    });
+
+    return res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+

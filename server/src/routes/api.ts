@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login } from '../controllers/authController';
+import { register, login, getUsers } from '../controllers/authController';
 import { getProjects, createProject, getProjectTasks, createTask } from '../controllers/projectController';
 import { updateTask, deleteTask } from '../controllers/taskController';
 import { authenticateJWT } from '../middleware/auth';
@@ -10,6 +10,9 @@ const router = Router();
 router.post('/auth/register', register);
 router.post('/auth/login', login);
 
+// Users Route (Protected)
+router.get('/users', authenticateJWT, getUsers);
+
 // Project & Task Routes (Protected)
 router.get('/projects', authenticateJWT, getProjects);
 router.post('/projects', authenticateJWT, createProject);
@@ -19,3 +22,4 @@ router.patch('/tasks/:id', authenticateJWT, updateTask);
 router.delete('/tasks/:id', authenticateJWT, deleteTask);
 
 export default router;
+
